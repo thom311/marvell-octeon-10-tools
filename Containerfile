@@ -30,7 +30,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] ; then \
 
         cd /build/pcie_ep_octeon_target/ && \
         git clean -fdx && \
-        git checkout -B tmp 35c9be07d2eefe1c909efefc9faa495db965a58e && \
+        git checkout -B tmp 6e11fe6a89c7617d2a3c1b1a41d2e010b579db09 && \
         \
         cd /build/pcie_ep_octeon_target/target/libs/octep_cp_lib/ && \
         make CFLAGS="-DUSE_PEM_AND_DPI_PF=1" && \
@@ -95,7 +95,7 @@ COPY --from=builder-octep-cp-agent /build/ /build/
 COPY manifests/exec_octep_cp_agent /build/
 
 RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] ; then \
-        mv /build/pcie_ep_octeon_target/target/apps/octep_cp_agent/bin/bin/octep_cp_agent \
+        mv /build/pcie_ep_octeon_target/target/apps/octep_cp_agent/bin/octep_cp_agent \
            /build/pcie_ep_octeon_target/target/apps/octep_cp_agent/cn106xx.cfg \
            /build/octep_cp_agent.25.03.0 \
            /usr/bin/ && \

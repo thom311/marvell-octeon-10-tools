@@ -50,9 +50,10 @@ run() {
         cp_args=( --dpi_dev "$dpi" )
         cp_agent="/usr/bin/octep_cp_agent.25.03.0"
     else
-        # https://github.com/MarvellEmbeddedProcessors/pcie_ep_octeon_target/blob/35c9be07d2eefe1c909efefc9faa495db965a58e/target/apps/octep_cp_agent/README#L139
+        # https://github.com/MarvellEmbeddedProcessors/pcie_ep_octeon_target/blob/6e11fe6a89c7617d2a3c1b1a41d2e010b579db09/target/apps/octep_cp_agent/README#L137
+        bind_vfio_pci "${rvu_pf_2[0]}"
         bind_vfio_pci "${rvu_pf_2[1]}"
-        cp_args=( --sdp_rvu_pf "${rvu_pf_2[1]}" )
+        cp_args=( --sdp_rvu_pf "${rvu_pf_2[0]},${rvu_pf_2[1]}" )
         cp_agent="/usr/bin/octep_cp_agent"
     fi
 
