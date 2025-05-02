@@ -23,12 +23,20 @@ run() {
     setup_hugepages
 
     chroot /host modprobe vfio-pci
-    echo vfio-pci > /sys/bus/pci/devices/0000:06:00.0/driver_override
-    echo vfio-pci > /sys/bus/pci/devices/0001:00:10.0/driver_override
-    echo 0000:06:00.0 > /sys/bus/pci/drivers_probe
-    echo 0001:00:10.0 > /sys/bus/pci/drivers_probe
 
-    exec /usr/bin/octep_cp_agent /usr/bin/cn106xx.cfg -- --dpi_dev 0000:06:00.0 --pem_dev 0001:00:10.0
+    pem="$(lspci -d 177d:a06c -n | awk 'NR==1{print $1}')"
+    rvu_pf_2="$(lspci -d 177d:a0ef -n | awk 'NR==2{print $1}')"
+
+    test -n "$pem"
+    test -n "$rvu_pf_2"
+
+    echo vfio-pci > "/sys/bus/pci/devices/$pem/driver_override"
+    echo "$pem" > /sys/bus/pci/drivers_probe
+
+    echo vfio-pci > "/sys/bus/pci/devices/$rvu_pf_2/driver_override"
+    echo "$rvu_pf_2" > /sys/bus/pci/drivers_probe
+
+    exec /usr/bin/octep_cp_agent /usr/bin/cn106xx.cfg -- --sdp_rvu_pf "$rvu_pf_2" --pem_dev "$pem"
 }
 
 run
