@@ -15,7 +15,7 @@ WORKDIR /build/
 RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] ; then \
         git clone https://github.com/MarvellEmbeddedProcessors/pcie_ep_octeon_target.git && \
         cd pcie_ep_octeon_target/ && \
-        git checkout -B tmp aa84a2331f76b68583e7b5861f17f5f3cef0fbd0 ; \
+        git checkout -B tmp 35c9be07d2eefe1c909efefc9faa495db965a58e ; \
     fi
 
 WORKDIR /build/pcie_ep_octeon_target/target/libs/octep_cp_lib/

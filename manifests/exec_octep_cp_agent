@@ -33,21 +33,23 @@ bind_vfio_pci() {
 run() {
     # Follows [1].
     #
-    # [1] https://github.com/MarvellEmbeddedProcessors/pcie_ep_octeon_target/blob/aa84a2331f76b68583e7b5861f17f5f3cef0fbd0/target/apps/octep_cp_agent/README#L107
+    # [1] https://github.com/MarvellEmbeddedProcessors/pcie_ep_octeon_target/blob/35c9be07d2eefe1c909efefc9faa495db965a58e/target/apps/octep_cp_agent/README#L107
     setup_hugepages
 
     chroot /host modprobe vfio-pci
 
     pem="$(lspci -d 177d:a06c -n | awk 'NR==1{print $1}')"
     dpi="$(lspci -d 177d:a080 -n | awk 'NR==1{print $1}')"
+    rvu_pf_2="$(lspci -d 177d:a0ef -n | awk 'NR==2{print $1}')"
 
     test -n "$pem"
     test -n "$dpi"
+    test -n "$rvu_pf_2"
 
     bind_vfio_pci "$pem"
     bind_vfio_pci "$dpi"
 
-    exec /usr/bin/octep_cp_agent /usr/bin/cn106xx.cfg -- --dpi_dev "$dpi" --pem_dev "$pem"
+    exec /usr/bin/octep_cp_agent /usr/bin/cn106xx.cfg -- --sdp_rvu_pf "$rvu_pf_2" --pem_dev "$pem"
 }
 
 run
